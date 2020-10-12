@@ -1,52 +1,57 @@
-const usersRepo = require('./user.memory.repository');
-const fs = require('fs');
+const boardsRepo = require('./board.memory.repository');
 
 function getAll() {
   return new Promise((resolve, reject) => {
-    resolve(usersRepo.getAll());
+    resolve(boardsRepo.getAll());
   });
 }
 
-function getUserById(userId) {
+function getBoardById(boardId) {
   return new Promise((resolve, reject) => {
     try {
-      resolve(usersRepo.getUserById(userId));
+      resolve(boardsRepo.getBoardById(boardId));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-function createUser(user) {
+function createBoard(board) {
   return new Promise((resolve, reject) => {
     try {
-      resolve(usersRepo.createUser(user));
+      resolve(boardsRepo.createBoard(board));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-function updateUser(user) {
+function updateBoard(board) {
   return new Promise((resolve, reject) => {
     try {
-      resolve(usersRepo.updateUser(user));
+      resolve(boardsRepo.updateBoard(board));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-function deleteUser(userId) {
+function deleteBoard(boardId) {
   return new Promise((resolve, reject) => {
     try {
-      usersRepo
-        .deleteUserTasks(userId)
-        .then(result => resolve(usersRepo.deleteUser(userId)));
+      boardsRepo
+        .deleteBoardTasks(boardId)
+        .then(result => resolve(boardsRepo.deleteBoard(boardId)));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-module.exports = { getAll, getUserById, createUser, updateUser, deleteUser };
+module.exports = {
+  getAll,
+  getBoardById,
+  createBoard,
+  updateBoard,
+  deleteBoard
+};

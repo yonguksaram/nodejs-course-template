@@ -1,52 +1,50 @@
-const usersRepo = require('./user.memory.repository');
-const fs = require('fs');
+const tasksRepo = require('./task.memory.repository');
 
 function getAll() {
   return new Promise((resolve, reject) => {
-    resolve(usersRepo.getAll());
+    resolve(tasksRepo.getAll());
   });
 }
 
-function getUserById(userId) {
+function getTaskById(taskId) {
   return new Promise((resolve, reject) => {
     try {
-      resolve(usersRepo.getUserById(userId));
+      resolve(tasksRepo.getTaskById(taskId));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-function createUser(user) {
+function createTask(task, boardId) {
   return new Promise((resolve, reject) => {
+    task.boardId = boardId;
     try {
-      resolve(usersRepo.createUser(user));
+      resolve(tasksRepo.createTask(task));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-function updateUser(user) {
+function updateTask(task) {
   return new Promise((resolve, reject) => {
     try {
-      resolve(usersRepo.updateUser(user));
+      resolve(tasksRepo.updateTask(task));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-function deleteUser(userId) {
+function deleteTask(taskId) {
   return new Promise((resolve, reject) => {
     try {
-      usersRepo
-        .deleteUserTasks(userId)
-        .then(result => resolve(usersRepo.deleteUser(userId)));
+      resolve(tasksRepo.deleteTask(taskId));
     } catch (error) {
       reject('an error occured');
     }
   });
 }
 
-module.exports = { getAll, getUserById, createUser, updateUser, deleteUser };
+module.exports = { getAll, getTaskById, createTask, updateTask, deleteTask };

@@ -4,7 +4,7 @@ const fs = require('fs');
 function getAll() {
   return new Promise((resolve, reject) => {
     try {
-      const data = CommonHelper.getAllItems('src/resources/users/users.json');
+      const data = CommonHelper.getAllItems('src/resources/boards/boards.json');
       resolve(data);
     } catch (error) {
       reject('an error occured');
@@ -12,12 +12,12 @@ function getAll() {
   });
 }
 
-function getUserById(userId) {
+function getBoardById(boardId) {
   return new Promise((resolve, reject) => {
     try {
       const data = CommonHelper.getItem(
-        'src/resources/users/users.json',
-        userId
+        'src/resources/boards/boards.json',
+        boardId
       );
       resolve(data);
     } catch (error) {
@@ -26,13 +26,12 @@ function getUserById(userId) {
   });
 }
 
-function createUser(user) {
+function createBoard(board) {
   return new Promise((resolve, reject) => {
     try {
       const data = CommonHelper.createItem(
-        'src/resources/users/users.json',
-        user,
-        'The user was created'
+        'src/resources/boards/boards.json',
+        board
       );
       resolve(data);
     } catch (error) {
@@ -41,13 +40,13 @@ function createUser(user) {
   });
 }
 
-function updateUser(user) {
+function updateBoard(board) {
   return new Promise((resolve, reject) => {
     try {
       const data = CommonHelper.updateItem(
-        'src/resources/users/users.json',
-        user,
-        'The user was updated'
+        'src/resources/boards/boards.json',
+        board,
+        'The board was updated'
       );
       resolve(data);
     } catch (error) {
@@ -56,13 +55,13 @@ function updateUser(user) {
   });
 }
 
-function deleteUser(userId) {
+function deleteBoard(boardId) {
   return new Promise((resolve, reject) => {
     try {
       const data = CommonHelper.deleteItem(
-        'src/resources/users/users.json',
-        userId,
-        'The user was deleted'
+        'src/resources/boards/boards.json',
+        boardId,
+        'The board was deleted'
       );
       resolve(data);
     } catch (error) {
@@ -71,7 +70,7 @@ function deleteUser(userId) {
   });
 }
 
-function deleteUserTasks(userId) {
+function deleteBoardTasks(boardId) {
   return new Promise((resolve, reject) => {
     try {
       fs.readFile('src/resources/tasks/tasks.json', 'utf8', (error, data) => {
@@ -82,16 +81,17 @@ function deleteUserTasks(userId) {
         data = JSON.parse(`[${data}]`);
         let doesItemExist = false;
         for (const index in data) {
-          if (data[index].userId && userId === data[index].userId) {
-            data[index].userId = null;
+          if (data[index].boardId && boardId === data[index].boardId) {
+            data[index] = {};
             doesItemExist = true;
           }
         }
         if (doesItemExist) {
+          data = data.filter(item => item.id);
           data = JSON.stringify(data);
           data = data.slice(1, data.length - 1);
           fs.writeFileSync('src/resources/tasks/tasks.json', data);
-          resolve('The tasks were deleted');
+          resolve('There tasks were deleted');
         } else {
           resolve('There is no tasks fot this board');
         }
@@ -104,9 +104,9 @@ function deleteUserTasks(userId) {
 
 module.exports = {
   getAll,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-  deleteUserTasks
+  getBoardById,
+  createBoard,
+  updateBoard,
+  deleteBoard,
+  deleteBoardTasks
 };
